@@ -35,6 +35,12 @@ public class Player : MonoBehaviour
 
     private GameObject floor;
 
+    [Header("Sounds")]
+    [SerializeField] private AudioSource jump;
+    [SerializeField] private AudioSource collide;
+    [SerializeField] private AudioSource splat;
+    [SerializeField] private AudioSource slope;
+
     private void Start()
     {
         body = GetComponent<Rigidbody2D>();
@@ -78,6 +84,15 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            if (contact.normal.y < -0.5f)
+            {
+                collide.Play();
+                break;
+            }
+        }
+
         if (collision.gameObject.CompareTag("Slope"))
         {
             foreach (ContactPoint2D contact in collision.contacts)
@@ -87,6 +102,7 @@ public class Player : MonoBehaviour
                     Debug.Log("hit slope floor");
                     body.velocity = new Vector2(-1, body.velocity.y);
                     animator.SetBool("isColliding", true);
+                    slope.Play();
                     return;
                 }
             }
@@ -97,6 +113,7 @@ public class Player : MonoBehaviour
             if (Mathf.Abs(contact.normal.x) > 0.5f)
             {
                 Debug.Log("hit sides");
+                collide.Play();
                 body.velocity = new Vector2(-lastVelocity.x * bounceMultiplier, body.velocity.y);
                 animator.SetBool("isColliding", true);
                 break;
@@ -115,6 +132,7 @@ public class Player : MonoBehaviour
                 if (Mathf.Abs(lastVelocity.y) > splatVelocityThreshold)
                 {
                     animator.SetBool("isSplatting", true);
+                    splat.Play();
                 }
                 break;
             }
@@ -174,6 +192,7 @@ public class Player : MonoBehaviour
         }
         if (context.canceled && charging)
         {
+            jump.Play();
             Debug.Log("Jumped");
             grounded = false;
             charging = false;
