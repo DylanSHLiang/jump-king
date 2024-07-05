@@ -40,6 +40,9 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource collide;
     [SerializeField] private AudioSource splat;
     [SerializeField] private AudioSource slope;
+    [SerializeField] private AudioSource land;
+    [SerializeField] private AudioSource music;
+    private float volume = 0.1f;
 
     private void Start()
     {
@@ -133,6 +136,9 @@ public class Player : MonoBehaviour
                 {
                     animator.SetBool("isSplatting", true);
                     splat.Play();
+                } else
+                {
+                    land.Play();
                 }
                 break;
             }
@@ -221,6 +227,37 @@ public class Player : MonoBehaviour
             Debug.Log("Looking up");
             animator.SetBool("isLookingUp", true);
             faceUp = true;
+        }
+    }
+
+    public void SetSFX(bool isOn)
+    {
+        if (isOn)
+        {
+            jump.volume = volume;
+            collide.volume = volume;
+            splat.volume = volume;
+            slope.volume = volume;
+            land.volume = volume;
+        } else
+        {
+            jump.volume = 0;
+            collide.volume = 0;
+            splat.volume = 0;
+            slope.volume = 0;
+            land.volume = 0;
+        }
+    }
+
+    public void MusicToggle(bool isOn)
+    {
+        if (isOn)
+        {
+            music.volume = volume;
+        }
+        else
+        {
+            music.volume = 0;
         }
     }
 }

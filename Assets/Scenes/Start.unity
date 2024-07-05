@@ -500,6 +500,9 @@ MonoBehaviour:
   start: {fileID: 112665289}
   settings: {fileID: 1269950936}
   resolutionDropdown: {fileID: 267694684}
+  UI:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &867585519
 GameObject:
   m_ObjectHideFlags: 0
